@@ -26,7 +26,7 @@ async def on_message(message):
     if user_name == client.user:
         return
 
-    elif re.search('^[Mm][Oo]([Mm]|[Tt][Hh][Ee][Rr])', user_name):
+    elif re.search('^[Mm][Oo]([Mm]|[Tt][Hh][Ee][Rr])', user_name.username):
         await message.channel.send('Nothing, dear.')
         return
 
