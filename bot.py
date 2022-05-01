@@ -101,7 +101,7 @@ async def on_message(message):
             with open(os.path.join('logs', '{}.txt'.format(server_name)), 'w') as myfile:
                 myfile.write('{}: {}'.format(user_name, msg))
 
-        await message.channel.send(msg)
+        await message.channel.send(msg[5:-13])
         return
             
 client.run(TOKEN)
