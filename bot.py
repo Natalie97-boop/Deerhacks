@@ -53,13 +53,13 @@ def generate_joke():
             for i in range(100):
                 outputs = model(cur_ids, labels=cur_ids)
                 loss, logits = outputs[:2]
-                softmax_logits = torch.softmax(logits[0,-1], dim=0) #Take the first(from only one in this case) batch and the last predicted embedding
+                softmax_logits = torch.softmax(logits[0,-1], dim=0)
                 if i < 3:
                     n = 20
                 else:
                     n = 3
-                next_token_id = choose_from_top(softmax_logits.to('cpu').numpy(), n=n) #Randomly(from the topN probability distribution) select the next word
-                cur_ids = torch.cat([cur_ids, torch.ones((1,1)).long().to(device) * next_token_id], dim = 1) # Add the last word to the running sequence
+                next_token_id = choose_from_top(softmax_logits.to('cpu').numpy(), n=n) 
+                cur_ids = torch.cat([cur_ids, torch.ones((1,1)).long().to(device) * next_token_id], dim = 1) 
 
                 if next_token_id in tokenizer.encode('<|endoftext|>'):
                     joke_finished = True
