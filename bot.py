@@ -26,38 +26,6 @@ description = ''
 
 client = discord.Client()
 
-@client.event
-async def on_ready():
-    print("Daddy is here")
-
-@client.event
-async def on_message(message):
-    server_name = message.guild.name
-    user_name = message.author
-
-    if user_name == client.user:
-        return
-
-    elif re.search('^[Mm][Oo]([Mm]|[Tt][Hh][Ee][Rr])', user_name):
-        await message.channel.send('Nothing, dear.')
-        return
-
-    if re.search(pattern, message.content):
-        # TODO forward pass to generate joke here
-        msg = generate_joke()
-        try:
-            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'a+') as myfile:
-                myfile.write('{}: {}'.format(user_name, msg))
-            
-        except:
-            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'w') as myfile:
-                myfile.write('{}: {}'.format(user_name, msg))
-
-        await message.channel.send(msg)
-        return
-            
-client.run(TOKEN)
-
 def choose_from_top(probs, n=5):
     ind = np.argpartition(probs, -n)[-n:]
     top_prob = probs[ind]
@@ -73,9 +41,7 @@ def generate_joke():
     model.load_state_dict(torch.load(model_path))
 
     model.eval()
-    if os.path.exists(jokes_output_file_path):
-        os.remove(jokes_output_file_path)
-        
+    
     with torch.no_grad():
    
         for joke_idx in range(1000):
@@ -102,11 +68,41 @@ def generate_joke():
             
             if joke_finished:
                 
-                joke_num = joke_num + 1
-                
                 output_list = list(cur_ids.squeeze().to('cpu').numpy())
                 output_text = tokenizer.decode(output_list)
-
                
                 return f"{output_text}"
-                    
+
+
+@client.event
+async def on_ready():
+    print("Daddy is here")
+
+@client.event
+async def on_message(message):
+    server_name = message.guild.name
+    user_name = str(message.author)
+
+    if user_name == client.user:
+        return
+
+    elif re.search('^[Mm][Oo]([Mm]|[Tt][Hh][Ee][Rr])', user_name):
+        await message.channel.send('Nothing, dear.')
+        return
+
+    if re.search(pattern, message.content):
+        # TODO forward pass to generate joke here
+        msg = generate_joke()
+        try:
+            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'a+') as myfile:
+                myfile.write('{}: {}'.format(user_name, msg))
+            
+        except:
+            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'w') as myfile:
+                myfile.write('{}: {}'.format(user_name, msg))
+
+        await message.channel.send(msg)
+        return
+            
+client.run(TOKEN)
+
