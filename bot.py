@@ -34,12 +34,12 @@ async def on_message(message):
         # TODO forward pass to generate joke here
         msg = generate_joke()
         try:
-            with open("logs/{}.txt".format(server_name), "a+") as myfile:
-                myfile.write("{}: {}".format(user_name, msg))
+            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'a+') as myfile:
+                myfile.write('{}: {}'.format(user_name, msg))
             
         except:
-            with open("logs/{}.txt".format(server_name), "w") as myfile:
-                myfile.write("{}: {}".format(user_name, msg))
+            with open(os.path.join('logs', '{}.txt'.format(server_name)), 'w') as myfile:
+                myfile.write('{}: {}'.format(user_name, msg))
 
         await message.channel.send(msg)
         return
