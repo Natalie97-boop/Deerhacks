@@ -21,7 +21,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    if message.author == bot.user:
+    if message.author == client.user:
         return
 
     if re.search(pattern, message.content):
